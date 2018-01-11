@@ -1,0 +1,9 @@
+=========================== Hello Spring Oauth ===========================
+Run oauth2-server and api-server, then
+
+$ curl -F "grant_type=client_credentials" -F "scope=read" "http://foo:bar@localhost:8080/oauth/token"
+
+Get a Access token, then
+
+$ curl -H "Authorization: Bearer {PUT-YOUR-ACCESS-TOKEN}" "http://localhost:8081/members"
+

@@ -1,0 +1,44 @@
+spring.application.name: my-auth-server
+
+
+spring.datasource:
+# My SQL Setting
+#  driverClassName: com.mysql.jdbc.Driver
+#  url: jdbc:mysql://${my.database.master.hostname}/${my.database.database}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+#  username: ${my.database.master.username}
+#  password: ${my.database.master.password}
+#  hikari:
+#    connection-test-query: SELECT 1
+#    connection-timeout: 5000
+#    idle-timeout: 180000  # 180s
+#    minimum-idle: 10
+#    maximum-pool-size: 20
+#  initialize: false
+
+# H2 Setting
+  driverClassName: org.h2.Driver
+  url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MYSQL
+  username: sa
+  password:
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+
+logging.level:
+  root: INFO
+  com.baeminchan: DEBUG
+
+
+endpoints:
+  enabled: false
+  health.enabled: true
+
+management:
+  context-path: /internal/management
+
+
+server.error.path: /_private/error
+error.path: ${server.error.path}

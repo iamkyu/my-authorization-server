@@ -1,0 +1,10 @@
+spring.test.database.replace: none
+
+my:
+  database:
+    database: ******
+    master:
+      hostname: ******
+      username: ******
+      password: ******
+
