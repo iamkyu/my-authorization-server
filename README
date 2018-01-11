@@ -1,9 +1,14 @@
-=========================== Hello Spring Oauth ===========================
-Run oauth2-server and api-server, then
+=========================== My Authorization Server ===========================
 
-$ curl -F "grant_type=client_credentials" -F "scope=read" "http://foo:bar@localhost:8080/oauth/token"
+The goal of the project is to build a token based authorization server.
 
-Get a Access token, then
+Based on...
 
-$ curl -H "Authorization: Bearer {PUT-YOUR-ACCESS-TOKEN}" "http://localhost:8081/members"
+RFC6749 The OAuth 2.0 Authorization Framework
+https://tools.ietf.org/html/rfc6749
 
+RFC6750 The OAuth 2.0 Authorization Framework: Bearer Token Usage
+https://tools.ietf.org/html/rfc6750
+
+RFC7662 OAuth 2.0 Token Introspection
+https://tools.ietf.org/html/rfc7662
