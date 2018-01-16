@@ -1,6 +1,7 @@
 package io.iamkyu.service;
 
 import io.iamkyu.domain.AccessToken;
+import io.iamkyu.domain.Client;
 import io.iamkyu.domain.RefreshToken;
 import io.iamkyu.domain.User;
 import io.iamkyu.dto.UserCredentials;
@@ -27,7 +28,8 @@ public class TokenService {
         this.userService = userService;
     }
 
-    public AccessToken allocateToken(UserCredentials userCredentials) throws BadCredentialsException {
+    public AccessToken allocateToken(Client client, UserCredentials userCredentials) throws BadCredentialsException {
+
         User user = userService.userAuthentication(userCredentials);
 
         AccessToken accessToken = new AccessToken(

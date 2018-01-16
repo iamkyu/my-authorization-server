@@ -1,25 +1,22 @@
 package io.iamkyu.controller;
 
-import io.iamkyu.domain.AccessToken;
-import io.iamkyu.domain.RefreshToken;
-import io.iamkyu.dto.UserCredentials;
+import io.iamkyu.domain.Client;
+import io.iamkyu.domain.User;
+import io.iamkyu.service.ClientService;
 import io.iamkyu.service.TokenService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.UUID;
-
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,13 +24,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Kj Nam
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @WebMvcTest(controllers = TokenController.class)
 public class TokenControllerTest {
 
     @Autowired private WebApplicationContext context;
 
     @MockBean private TokenService tokenService;
+
+    @MockBean private ClientService clientService;
 
     private MockMvc mvc;
 
@@ -42,24 +41,24 @@ public class TokenControllerTest {
         this.mvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
+    @Ignore("흐름만 만들어둔 테스트. 개선 필요")
     @Test
-    public void requestForToken() throws Exception {
+    public void 유효한_토큰_요청을_보낸다() throws Exception {
         //given
-        UserCredentials userCredentials = new UserCredentials("foo", "fcde2b2edba56bf408601fb721fe9b5c338d10ee429ea04fae5511b68fbf8fb9");
-        AccessToken token = new AccessToken(
-                UUID.randomUUID().toString(),
-                AccessToken.TOKEN_TYPE_BEARER,
-                new RefreshToken(UUID.randomUUID().toString()),
-                Date.from(Instant.now()));
+        Client client = new Client("client-id", "client-secret");
+        User user = new User(1L, "foo", "bar");
 
-        when(tokenService.allocateToken(userCredentials))
-                .thenReturn(token);
+        String concat = String.format("%s:%s", client.getClientId(), client.getClientSecret());
+        String encodedBasicHeader = new String(Base64Utils.encodeToString(concat.getBytes()));
 
         //when then
         this.mvc.perform(post("/oauth/token")
-                    .param("username", "foo")
-                    .param("password", "bar"))
+                    .header("Authorization", "Basic " + encodedBasicHeader)
+                    .param("grant_type", "password")
+                    .param("username", user.getName())
+                    .param("password", user.getPassword()))
                 .andExpect(status().isOk())
+                // .andExpect(content().json("{\"active\":true}"))
                 .andDo(print());
     }
 }
