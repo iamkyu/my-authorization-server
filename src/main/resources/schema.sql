@@ -4,27 +4,33 @@ CREATE TABLE IF NOT EXISTS user (
   password VARCHAR(256) NOT NULL
 );
 
-create table oauth_client_details (
+
+CREATE TABLE oauth_client_details (
+  `no` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   client_id VARCHAR(256),
   client_secret VARCHAR(256)
 );
 
-create table oauth_access_token (
-  token_id VARCHAR(256),
-  user_no VARCHAR(256),
-  client_id VARCHAR(256),
-  refresh_token VARCHAR(256)
+
+CREATE TABLE oauth_access_token (
+  `no` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `value` VARCHAR(256) NOT NULL,
+  user_no INT(11) UNSIGNED,
+  client_no INT(11) UNSIGNED,
+  refresh_token_no INT(11) UNSIGNED
 );
 
-create table oauth_refresh_token (
-  token_id VARCHAR(256)
+CREATE TABLE oauth_refresh_token (
+  `no` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `value` VARCHAR(256) NOT NULL
 );
 
-create table oauth_approvals (
-  user_id VARCHAR(256),
-  client_id VARCHAR(256),
+CREATE TABLE oauth_approvals (
+  `no` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_no INT(11) UNSIGNED,
+  client_no INT(11) UNSIGNED,
   scope VARCHAR(256),
-  status VARCHAR(10),
+  `status` VARCHAR(10),
   expires_at TIMESTAMP,
   lastModified_at TIMESTAMP
 );
