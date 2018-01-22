@@ -1,9 +1,10 @@
 package io.iamkyu.controller;
 
 import io.iamkyu.domain.AccessToken;
+import io.iamkyu.domain.Authentication;
 import io.iamkyu.domain.Client;
-import io.iamkyu.dto.UserCredentials;
-import io.iamkyu.exception.BadCredentialsException;
+import io.iamkyu.domain.UsernamePasswordAuthentication;
+import io.iamkyu.domain.UsernamePasswordAuthenticationManager;
 import io.iamkyu.exception.BadRequestException;
 import io.iamkyu.service.ClientService;
 import io.iamkyu.service.TokenService;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
@@ -28,25 +30,35 @@ public class TokenController {
 
     @Autowired private ClientService clientService;
 
+    @Autowired private UsernamePasswordAuthenticationManager authenticationManager;
+
     @PostMapping("/oauth/token")
-    public ResponseEntity<AccessToken> allocateToken(@RequestHeader(name = "Authorization") String authorization, Map<String, String> parameters) throws BadCredentialsException {
+    public ResponseEntity<AccessToken> allocateToken(@RequestHeader(name = "Authorization") String authorization,
+                                                     @RequestParam Map<String, String> parameters) throws Exception {
 
         if (!authorization.startsWith("Basic") || authorization.length() < 7) {
             throw new BadRequestException("Authorization 헤더가 올바르지 않습니다.");
         }
 
-
         String clientAuthorization = authorization.substring(6);
-        String decode = new String(Base64Utils.decodeFromString(clientAuthorization));
+        String credential = new String(Base64Utils.decodeFromString(clientAuthorization));
 
-        String[] split = decode.split(":");
-        Client client = clientService.loadClientByClientId(split[0]);
+        String[] credentials = credential.split(":");
+        Client authorizedClient = clientService.loadClientByClientId(credentials[0]);
 
-        String username = parameters.get("username");
-        String password = parameters.get("password");
+        Authentication authentication = new UsernamePasswordAuthentication(parameters.get("username"), parameters.get("password"));
+        authenticationManager.authenticate(authentication);
 
-        UserCredentials userCredentials = new UserCredentials(username, password);
-        AccessToken accessToken = tokenService.allocateToken(client, userCredentials);
+        if (!authentication.isAuthenticated()) {
+            // TODO throw exception
+        }
+
+        AccessToken accessToken = tokenService.allocateToken(authorizedClient, authentication);
+
+        if (accessToken == null) {
+            // TODO throw exception
+            throw new Exception("Access token is null");
+        }
 
         return getResponse(accessToken);
     }

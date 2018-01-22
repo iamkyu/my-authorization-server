@@ -1,10 +1,9 @@
 package io.iamkyu.service;
 
 import io.iamkyu.domain.AccessToken;
+import io.iamkyu.domain.Authentication;
 import io.iamkyu.domain.Client;
 import io.iamkyu.domain.RefreshToken;
-import io.iamkyu.domain.User;
-import io.iamkyu.dto.UserCredentials;
 import io.iamkyu.exception.BadCredentialsException;
 import io.iamkyu.repository.TokenJdbcRepository;
 import org.springframework.stereotype.Service;
@@ -28,9 +27,9 @@ public class TokenService {
         this.userService = userService;
     }
 
-    public AccessToken allocateToken(Client client, UserCredentials userCredentials) throws BadCredentialsException {
+    public AccessToken allocateToken(Client client, Authentication authentication) throws BadCredentialsException {
 
-        User user = userService.userAuthentication(userCredentials);
+        // User user = userService.userAuthentication(userCredentials);
 
         AccessToken accessToken = new AccessToken(
                 UUID.randomUUID().toString(),
@@ -38,7 +37,7 @@ public class TokenService {
                 new RefreshToken(UUID.randomUUID().toString()),
                 Date.from(Instant.now()));
 
-        tokenJdbcRepository.save(user, accessToken);
+        // tokenJdbcRepository.save(user, accessToken);
         return accessToken;
     }
 }
