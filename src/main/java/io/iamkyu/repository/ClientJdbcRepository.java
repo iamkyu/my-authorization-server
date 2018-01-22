@@ -20,7 +20,7 @@ public class ClientJdbcRepository {
     public Optional<Client> findByClientId(String clientId) {
 
         StringBuffer sql = new StringBuffer();
-        sql.append("SELECT client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove ");
+        sql.append("SELECT no, client_id, client_secret");
         sql.append("FROM oauth_client_details ");
         sql.append("WHERE  client_id = ?");
 
@@ -31,6 +31,7 @@ public class ClientJdbcRepository {
     }
 
     private RowMapper<Client> clientRowMapper = (rs, rowNum) -> new Client(
+            rs.getLong("no"),
             rs.getString("client_id"),
             rs.getString("client_secret")
     );

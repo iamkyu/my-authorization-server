@@ -55,7 +55,7 @@ public class TokenControllerTest {
     @Test
     public void 유효한_토큰_요청을_보낸다() throws Exception {
         //given
-        Client client = new Client("client-id", "client-secret");
+        Client client = new Client(1L, "client-id", "client-secret");
         Authentication authentication = new UsernamePasswordAuthentication("foo", "bar");
         AccessToken accessToken = generateToken();
 

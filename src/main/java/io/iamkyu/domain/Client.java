@@ -5,11 +5,14 @@ package io.iamkyu.domain;
  */
 public class Client {
 
+    private long no;
+
     private String clientId;
 
     private String clientSecret;
 
-    public Client(String clientId, String clientSecret) {
+    public Client(long no, String clientId, String clientSecret) {
+        this.no = no;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
     }
