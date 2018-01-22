@@ -46,6 +46,8 @@ public class TokenController {
         String[] credentials = credential.split(":");
         Client authorizedClient = clientService.loadClientByClientId(credentials[0]);
 
+        // TODO 클라이언트시크릿 검증
+
         Authentication authentication = new UsernamePasswordAuthentication(parameters.get("username"), parameters.get("password"));
         authenticationManager.authenticate(authentication);
 
