@@ -1,4 +1,4 @@
-package io.iamkyu.dto;
+package io.iamkyu.domain;
 
 /**
  * @author Kj Nam

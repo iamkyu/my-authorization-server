@@ -1,5 +1,6 @@
-package io.iamkyu.controller;
+package io.iamkyu.api;
 
+import io.iamkyu.api.TokenController;
 import io.iamkyu.domain.AccessToken;
 import io.iamkyu.domain.Authentication;
 import io.iamkyu.domain.Client;

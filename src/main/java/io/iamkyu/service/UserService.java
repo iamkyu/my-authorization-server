@@ -1,7 +1,7 @@
 package io.iamkyu.service;
 
 import io.iamkyu.domain.User;
-import io.iamkyu.dto.UserCredentials;
+import io.iamkyu.domain.UserCredentials;
 import io.iamkyu.exception.BadCredentialsException;
 import io.iamkyu.repository.UserJdbcRepository;
 import org.springframework.stereotype.Service;
