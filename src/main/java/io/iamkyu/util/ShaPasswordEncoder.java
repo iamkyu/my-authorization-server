@@ -1,4 +1,4 @@
-package io.iamkyu.encoding;
+package io.iamkyu.util;
 
 import java.security.MessageDigest;
 

@@ -1,5 +1,7 @@
-package io.iamkyu.encoding;
+package io.iamkyu.util;
 
+import io.iamkyu.util.PasswordEncoder;
+import io.iamkyu.util.ShaPasswordEncoder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
